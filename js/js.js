@@ -47,5 +47,11 @@ $(function() {
     $('#org-identifier-group').css('visibility','hidden');
   })
 
-  new Clipboard('#copy-button');
+  var clipboard = new Clipboard('#copy-button');
+  clipboard.on('success', function() {
+    $('#copy-button').tooltip('show');
+    setTimeout(function () {
+      $('#copy-button').tooltip('destroy');
+    }, 500);
+  })
 });
