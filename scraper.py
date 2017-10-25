@@ -47,7 +47,7 @@ def get_text(el, path):
     return text
 
 
-for idx, r in enumerate(data):
+for r in data:
     if len(r['resources']) == 0:
         continue
     url = r['resources'][0]['url']
