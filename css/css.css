@@ -146,3 +146,7 @@ h1,
 #org-identifier-group {
   visibility: hidden;
 }
+
+.select2-rendered__match {
+  font-weight: bold;
+}
