@@ -10,14 +10,16 @@ environ['SCRAPERWIKI_DATABASE_NAME'] = 'sqlite:///data.sqlite'
 import scraperwiki
 
 
+rows = 1000
 tmpl = 'https://iatiregistry.org/api/3/action/package_search?' + \
-       'q=extras_filetype:organisation&start={}&rows=1000'
+       'q=extras_filetype:organisation&start={{}}&rows={}'.format(rows)
+
 
 page = 1
 data = []
 while True:
     print('Fetching page {} ...'.format(page))
-    start = (page - 1) * 1000
+    start = (page - 1) * rows
     j = requests.get(tmpl.format(start)).json()
     cur_data = j['result']['results']
     if cur_data == []:
