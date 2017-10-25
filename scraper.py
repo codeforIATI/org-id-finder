@@ -1,3 +1,4 @@
+from datetime import datetime
 from os import environ
 import time
 
@@ -79,5 +80,6 @@ for r in data:
                 'code': code,
                 'source_url': url,
                 'source_dataset': dataset_name,
+                'updated_at': datetime.now().isoformat(),
             }
             scraperwiki.sqlite.save(['code', 'lang'], data, 'organisations')
