@@ -72,14 +72,16 @@ for r in data:
         except AttributeError:
             name = get_text(organisation, 'reporting-org')
             code = organisation.find('reporting-org').get('ref')
-        for lang, lang_name in name.items():
-            data = {
-                'lang': lang,
-                'name': lang_name,
-                'name_en': name.get('en', '') if lang != 'en' else '',
-                'code': code,
-                'source_url': url,
-                'source_dataset': dataset_name,
-                'updated_at': datetime.now().isoformat(),
-            }
-            scraperwiki.sqlite.save(['code', 'lang'], data, 'organisations')
+        if code:
+            for lang, lang_name in name.items():
+                key = ['code', 'lang']
+                data = {
+                    'lang': lang,
+                    'name': lang_name,
+                    'name_en': name.get('en', '') if lang != 'en' else '',
+                    'code': code,
+                    'source_url': url,
+                    'source_dataset': dataset_name,
+                    'updated_at': datetime.now().isoformat(),
+                }
+                scraperwiki.sqlite.save(key, data, 'organisations')
