@@ -9,7 +9,7 @@ $(function() {
       data: function (params) {
         var query = {
           key: 'wFTSIH61nwMjLBhphd4T',
-          query: 'select * from "organisations" where name like "%' + params.term + '%" or code like "%' + params.term +  '%" limit 5'
+          query: 'SELECT * FROM "organisations" WHERE `name` LIKE "%' + params.term + '%" OR `code` LIKE "%' + params.term +  '%" LIMIT 5'
         }
         return query;
       },
@@ -30,7 +30,7 @@ $(function() {
   orgSelect.on('select2:select', function(e) {
     var identifier = e.params.data.id;
     $('#org-identifier').val(identifier);
-    $('#org-identifier-group').css('visibility','visible').hide().fadeIn('slow');
+    $('#org-identifier-group').css('visibility', 'visible').hide().fadeIn('slow');
     $('body').animate({
       backgroundColor: '#353'
     }, 200, function() {
@@ -44,7 +44,7 @@ $(function() {
     if ($(this).val() !== null) {
       $(this).val(null).trigger('change');
     }
-    $('#org-identifier-group').css('visibility','hidden');
+    $('#org-identifier-group').css('visibility', 'hidden');
   })
 
   var clipboard = new Clipboard('#copy-button');
