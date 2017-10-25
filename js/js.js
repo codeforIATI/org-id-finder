@@ -23,6 +23,8 @@ $(function() {
           return {
             id: d.code,
             text: d.name,
+            source_url: d.source_url,
+            source_dataset: d.source_dataset
           }
         })
         return {
@@ -34,6 +36,16 @@ $(function() {
 
   orgSelect.on('select2:select', function(e) {
     var identifier = e.params.data.id;
+    var sourceUrl = e.params.data.source_url;
+    var sourceDataset = e.params.data.source_dataset;
+
+    var previewUrl = 'http://preview.iatistandard.org/index.php?url=' + encodeURIComponent(sourceUrl);
+    var registryUrl = 'https://iatiregistry.org/dataset/' + sourceDataset;
+
+    $('#source-preview').attr('href', previewUrl);
+    $('#source-raw').attr('href', sourceUrl);
+    $('#source-registry').attr('href', registryUrl);
+
     $('#org-identifier').val(identifier);
     $('#org-identifier-group').css('visibility', 'visible').hide().fadeIn('slow');
     $('body').animate({
