@@ -1,4 +1,4 @@
-# Org ID finder
+# IATI Organisation ID Lookup
 
 Search organisation names for their org-ids, as declared in IATI organisation files.
 
