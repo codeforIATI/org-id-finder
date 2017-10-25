@@ -1,6 +1,11 @@
 $(function() {
   var orgSelect = $('#org-select').select2({
     theme: "bootstrap",
+    language: {
+      errorLoading: function() {
+        return "Searching...";
+      }
+    },
     placeholder: "E.g. Publish What You Fund",
     minimumInputLength: 2,
     ajax: {
