@@ -15,12 +15,18 @@ tmpl = 'https://iatiregistry.org/api/3/action/package_search?' + \
        'q=extras_filetype:organisation&start={{}}&rows={}'.format(rows)
 
 
+def fetch(url):
+    print('Fetching: {}'.format(url))
+    r = requests.get(url)
+    time.sleep(0.5)
+    return r
+
+
 page = 1
 data = []
 while True:
-    print('Fetching page {} ...'.format(page))
     start = (page - 1) * rows
-    j = requests.get(tmpl.format(start)).json()
+    j = fetch(tmpl.format(start)).json()
     cur_data = j['result']['results']
     if cur_data == []:
         break
@@ -45,8 +51,7 @@ for idx, r in enumerate(data):
     if len(r['resources']) == 0:
         continue
     url = r['resources'][0]['url']
-    r = requests.get(url)
-    time.sleep(0.5)
+    r = fetch(url)
     try:
         xml = etree.fromstring(r.content)
     except:
