@@ -75,6 +75,7 @@ for r in data:
             data = {
                 'lang': lang,
                 'name': lang_name,
+                'name_en': name.get('en', '') if lang != 'en' else '',
                 'code': code,
                 'source_url': url,
                 'source_dataset': dataset_name,
