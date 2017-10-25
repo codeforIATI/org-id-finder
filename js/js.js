@@ -9,7 +9,7 @@ $(function() {
       data: function (params) {
         var query = {
           key: 'wFTSIH61nwMjLBhphd4T',
-          query: 'select * from "organisations" where name like "%' + params.term + '%" limit 5'
+          query: 'select * from "organisations" where name like "%' + params.term + '%" or code like "%' + params.term +  '%" limit 5'
         }
         return query;
       },
