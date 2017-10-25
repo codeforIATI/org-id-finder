@@ -142,3 +142,7 @@ h1,
     width: 700px;
   }
 }
+
+#org-identifier-group {
+  visibility: hidden;
+}
