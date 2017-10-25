@@ -51,6 +51,7 @@ for r in data:
     if len(r['resources']) == 0:
         continue
     url = r['resources'][0]['url']
+    dataset_name = r['name']
     r = fetch(url)
     try:
         xml = etree.fromstring(r.content)
@@ -75,5 +76,7 @@ for r in data:
                 'lang': lang,
                 'name': lang_name,
                 'code': code,
+                'source_url': url,
+                'source_dataset': dataset_name,
             }
             scraperwiki.sqlite.save(['code', 'lang'], data, 'organisations')
