@@ -15,7 +15,7 @@ $(function() {
         var query = {
           key: 'wFTSIH61nwMjLBhphd4T',
           query: 'SELECT * FROM "organisations" WHERE `name` LIKE "%' + params.term + '%" OR `code` LIKE "%' + params.term +  '%" LIMIT 5'
-        }
+        };
         return query;
       },
       processResults: function (data) {
@@ -25,14 +25,14 @@ $(function() {
             text: d.name,
             source_url: d.source_url,
             source_dataset: d.source_dataset
-          }
-        })
+          };
+        });
         return {
           results: results
         };
       }
     }
-  })
+  });
 
   orgSelect.on('select2:select', function(e) {
     var identifier = e.params.data.id;
@@ -62,7 +62,7 @@ $(function() {
       $(this).val(null).trigger('change');
     }
     $('#org-identifier-group').css('visibility', 'hidden');
-  })
+  });
 
   var clipboard = new Clipboard('#copy-button');
   clipboard.on('success', function() {
@@ -70,5 +70,5 @@ $(function() {
     setTimeout(function () {
       $('#copy-button').tooltip('destroy');
     }, 500);
-  })
+  });
 });
