@@ -17,7 +17,7 @@ $(function() {
         var results = $.map(data, function(d) {
           return {
             id: d.code,
-            text: d.name,
+            text: d.name + ' (' + d.code + ')',
           }
         })
         return {
