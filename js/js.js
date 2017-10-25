@@ -1,12 +1,12 @@
 $(function() {
   var orgSelect = $('#org-select').select2({
-    theme: "bootstrap",
+    theme: 'bootstrap',
     language: {
       errorLoading: function() {
-        return "Searching...";
+        return 'Searching...';
       }
     },
-    placeholder: "E.g. Publish What You Fund",
+    placeholder: 'E.g. Publish What You Fund',
     minimumInputLength: 2,
     ajax: {
       url: 'https://api.morph.io/andylolz/org-id-finder/data.json',
