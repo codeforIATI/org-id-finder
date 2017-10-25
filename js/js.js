@@ -31,6 +31,13 @@ $(function() {
     var identifier = e.params.data.id;
     $('#org-identifier').val(identifier);
     $('#org-identifier-group').css('visibility','visible').hide().fadeIn('slow');
+    $('body').animate({
+      backgroundColor: '#353'
+    }, 200, function() {
+      $(this).animate({
+        backgroundColor: '#333'
+      }, 200);
+    });
   });
 
   orgSelect.on('select2:open', function() {
