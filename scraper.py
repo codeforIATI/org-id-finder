@@ -42,7 +42,10 @@ def get_text(el, path):
     if narratives != []:
         for narrative in narratives:
             lang = narrative.attrib.get('{{{}}}lang'.format(ns), 'en')
-            text[lang] = narrative.text
+            # this is a silly hack to prefer the first occurrence
+            # of a string for a given language, rather than the last
+            if lang not in text:
+                text[lang] = narrative.text
     else:
         text['en'] = el.find(path).text
     return text
