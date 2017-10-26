@@ -4,7 +4,7 @@ Search organisation names to find their respective organisation identifiers (and
 
 ## What’s this for?
 
-For traceability [[1]](#footnote-1), it’s crucial to know that ‘organisation one’ is the same as ‘organizzazione uno’. IATI solves this problem with [organisation identifiers](http://iatistandard.org/202/organisation-standard/iati-organisations/iati-organisation/organisation-identifier/) – standard, canonical references for organisations.
+For traceability [[1]](#footnote-1), it’s crucial to know that ‘organisation one’ is the same as ‘organizzazione uno’. IATI solves this problem with [organisation identifiers](http://iatistandard.org/202/organisation-identifiers/) – standard, canonical references for organisations.
 
 However, there’s no single database for these references (there’s just a [list of lists](http://org-id.guide)), so:
 
