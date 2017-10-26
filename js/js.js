@@ -62,9 +62,13 @@ $(function() {
       },
       processResults: function (data) {
         var results = $.map(data, function(d) {
+          var text = d.name;
+          if (d.name_en !== '') {
+            text = text + ' (' + d.name_en + ')';
+          }
           return {
             id: d.code,
-            text: d.name,
+            text: text,
             source_url: d.source_url,
             source_dataset: d.source_dataset
           };
