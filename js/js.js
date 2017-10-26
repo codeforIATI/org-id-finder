@@ -34,7 +34,7 @@ $(function() {
         return item.text;
       }
 
-      var term = query.term || '';
+      var term = search_query.term || '';
       var $result = markMatch(item.text, term);
 
       return $result;
@@ -44,7 +44,7 @@ $(function() {
         return 'Searching...';
       },
       searching: function(params) {
-        query = params;
+        search_query = params;
         return 'Searching...';
       }
     },
