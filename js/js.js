@@ -81,6 +81,11 @@ $(function() {
   });
 
   orgSelect.on('select2:select', function(e) {
+    // hack to fix a bug with select2
+    var $selected = $('#select2-org-select-container');
+    $selected.attr('title', e.params.data.text);
+    $selected.text(e.params.data.text);
+
     var identifier = e.params.data.id;
     var sourceUrl = e.params.data.source_url;
     var sourceDataset = e.params.data.source_dataset;
