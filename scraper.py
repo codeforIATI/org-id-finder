@@ -56,7 +56,10 @@ for r in data:
         continue
     url = r['resources'][0]['url']
     dataset_name = r['name']
-    r = fetch(url)
+    try:
+        r = fetch(url)
+    except:
+        continue
     try:
         xml = etree.fromstring(r.content)
     except:
