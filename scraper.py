@@ -59,10 +59,12 @@ for r in data:
     try:
         r = fetch(url)
     except:
+        print('Error! Failed to fetch: {}'.format(url))
         continue
     try:
         xml = etree.fromstring(r.content)
     except:
+        print('Error! Failed to parse: {}'.format(url))
         continue
     xpath = '//iati-organisation'
     organisations = xml.xpath(xpath)
