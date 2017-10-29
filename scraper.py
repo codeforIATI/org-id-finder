@@ -11,6 +11,7 @@ environ['SCRAPERWIKI_DATABASE_NAME'] = 'sqlite:///data.sqlite'
 import scraperwiki
 
 
+scrape_started_at = datetime.now().isoformat()
 rows = 1000
 tmpl = 'https://iatiregistry.org/api/3/action/package_search?' + \
        'q=extras_filetype:organisation&start={{}}&rows={}'.format(rows)
@@ -93,3 +94,10 @@ for r in data:
                     'updated_at': datetime.now().isoformat(),
                 }
                 scraperwiki.sqlite.save(key, data, 'organisations')
+
+# remove old data
+expr = ' FROM organisations WHERE updated_at < "{}"'.format(scrape_started_at)
+results_to_remove = scraperwiki.sqlite.select('*' + expr)
+for x in results_to_remove:
+    print('Deleting expired data: {} ({})'.format(x['name'], x['code']))
+_ = scraperwiki.sqlite.execute('DELETE' + expr)
