@@ -147,12 +147,21 @@ h1,
   visibility: hidden;
 }
 
-.select2-rendered__match {
-  font-weight: bold;
+.select2-results__option > span {
+  display: flex;
 }
 
+.select2-rendered__name {
+  flex-basis: 100%;
+}
 
 .select2-rendered__code {
-  float: right;
+  white-space: nowrap;
+  text-align: right;
+  padding-left: 10px;
   font-style: italic;
+}
+
+.select2-rendered__match {
+  font-weight: bold;
 }
