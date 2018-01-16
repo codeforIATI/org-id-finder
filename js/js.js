@@ -35,9 +35,11 @@ $(function() {
       }
 
       var term = search_query.term || '';
-      var $result = markMatch(item.text, term);
+      var $highlightedText = markMatch(item.text, term);
+      var $highlightedCode = markMatch(item.id, term);
+      $highlightedCode = $highlightedCode.addClass('select2-rendered__code');
 
-      return $result;
+      return $highlightedText.append($highlightedCode);
     },
     language: {
       errorLoading: function() {

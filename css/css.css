@@ -150,3 +150,9 @@ h1,
 .select2-rendered__match {
   font-weight: bold;
 }
+
+
+.select2-rendered__code {
+  float: right;
+  font-style: italic;
+}
