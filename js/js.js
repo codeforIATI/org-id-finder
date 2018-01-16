@@ -35,11 +35,12 @@ $(function() {
       }
 
       var term = search_query.term || '';
-      var $highlightedText = markMatch(item.text, term);
+      var $highlightedName = markMatch(item.text, term);
+      $highlightedName = $highlightedName.addClass('select2-rendered__name');
       var $highlightedCode = markMatch(item.id, term);
       $highlightedCode = $highlightedCode.addClass('select2-rendered__code');
 
-      return $highlightedText.append($highlightedCode);
+      return $('<span>').append($highlightedName, $highlightedCode);
     },
     language: {
       errorLoading: function() {
