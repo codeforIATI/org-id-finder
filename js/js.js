@@ -1,4 +1,12 @@
 $(function() {
+  function clearHash() {
+    if ('pushState' in history) {
+      history.pushState("", document.title, window.location.pathname);
+    } else {
+      window.location.hash = '';
+    }
+  }
+
   // from: https://stackoverflow.com/questions/28958620/using-select2-4-0-0-with-infinite-data-and-filter#29018243
   function markMatch(text, term) {
     // Find where the match is
@@ -69,12 +77,15 @@ $(function() {
       processResults: function (data) {
         var results = $.map(data, function(d) {
           var text = d.name;
+          var hash = d.code;
           if (d.name_en !== '') {
             text = text + ' (' + d.name_en + ')';
+            hash = hash + '%20' + d.lang;
           }
           return {
             id: d.code,
             text: text,
+            hash: hash,
             source_url: d.source_url,
             source_dataset: d.source_dataset
           };
@@ -86,6 +97,56 @@ $(function() {
     }
   });
 
+  var pageHash = window.location.hash.substr(1);
+  if (pageHash !== '') {
+    var pageHashArr = pageHash.split('%20');
+    var code = pageHashArr[0];
+    var lang = 'en';
+    if (pageHashArr.length > 1) {
+      lang = pageHashArr[1];
+    }
+    console.log(lang);
+    $.get({
+        url: morphApiUrl,
+        dataType: 'jsonp',
+        data: {
+          key: morphApiKey,
+          query: 'SELECT * FROM "organisations" WHERE `code` = "' + code + '" AND lang = "' + lang + '"'
+        }
+    }).then(function (d) {
+      if (d.length === 0) {
+        clearHash();
+      } else {
+        d = d[0];
+        var text = d.name;
+        var hash = d.code;
+        if (d.name_en !== '') {
+          text = text + ' (' + d.name_en + ')';
+          hash = hash + '%20' + d.lang;
+        }
+        var data = {
+          id: d.code,
+          text: text,
+          hash: hash,
+          source_url: d.source_url,
+          source_dataset: d.source_dataset
+        };
+
+        // create the option and append to Select2
+        var option = new Option(d.name, d.id, true, true);
+        orgSelect.append(option).trigger('change');
+
+        // manually trigger the `select2:select` event
+        orgSelect.trigger({
+            type: 'select2:select',
+            params: {
+                data: data
+            }
+        });
+      }
+    });
+  }
+
   orgSelect.on('select2:select', function(e) {
     // hack to fix a bug with select2
     var $selected = $('#select2-org-select-container');
@@ -95,6 +156,8 @@ $(function() {
     var identifier = e.params.data.id;
     var sourceUrl = e.params.data.source_url;
     var sourceDataset = e.params.data.source_dataset;
+
+    window.location.hash = e.params.data.hash;
 
     var previewUrl = 'http://preview.iatistandard.org/index.php?url=' + encodeURIComponent(sourceUrl);
     var registryUrl = 'https://iatiregistry.org/dataset/' + sourceDataset;
@@ -117,6 +180,7 @@ $(function() {
   orgSelect.on('select2:open', function() {
     if ($(this).val() !== null) {
       $(this).val(null).trigger('change');
+      clearHash();
     }
     $('#org-identifier-group').css('visibility', 'hidden');
   });
