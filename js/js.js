@@ -27,6 +27,9 @@ $(function() {
     return $result;
   }
 
+  var morphApiUrl = 'https://api.morph.io/andylolz/org-id-finder/data.json';
+  var morphApiKey = 'wFTSIH61nwMjLBhphd4T';
+
   var orgSelect = $('#org-select').select2({
     theme: 'bootstrap',
     templateResult: function(item) {
@@ -54,11 +57,11 @@ $(function() {
     placeholder: 'E.g. Publish What You Fund',
     minimumInputLength: 2,
     ajax: {
-      url: 'https://api.morph.io/andylolz/org-id-finder/data.json',
+      url: morphApiUrl,
       dataType: 'jsonp',
       data: function (params) {
         var query = {
-          key: 'wFTSIH61nwMjLBhphd4T',
+          key: morphApiKey,
           query: 'SELECT * FROM "organisations" WHERE `name` LIKE "%' + params.term + '%" OR `code` LIKE "%' + params.term +  '%" LIMIT 5'
         };
         return query;
