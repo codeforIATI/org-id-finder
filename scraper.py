@@ -60,7 +60,7 @@ for r in data:
     r = fetch(url)
     try:
         xml = etree.fromstring(r.content)
-    except:
+    except etree.XMLSyntaxError:
         print('Error! Failed to parse: {}'.format(url))
         continue
     xpath = '//iati-organisation'
