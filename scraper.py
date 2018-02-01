@@ -74,7 +74,11 @@ for r in data:
         continue
     url = r['resources'][0]['url']
     dataset_name = r['name']
-    r = fetch(url)
+    try:
+        r = fetch(url)
+    except requests.exceptions.ConnectionError:
+        print('Error! Failed to fetch: {}'.format(url))
+        continue
     try:
         xml = etree.fromstring(r.content)
     except etree.XMLSyntaxError:
