@@ -17,6 +17,18 @@ tmpl = 'https://iatiregistry.org/api/3/action/package_search?' + \
        'q=extras_filetype:organisation&start={{}}&rows={}'.format(rows)
 
 
+def save_status(started_at, finished_at=None, success=False):
+    scraperwiki.sqlite.save(
+        ['started_at'],
+        {
+            'started_at': started_at,
+            'finished_at': finished_at,
+            'success': success,
+        },
+        'status'
+    )
+
+
 def fetch(url):
     print('Fetching: {}'.format(url))
     r = requests.get(url)
@@ -24,6 +36,7 @@ def fetch(url):
     return r
 
 
+save_status(scrape_started_at)
 page = 1
 data = []
 while True:
@@ -97,3 +110,6 @@ results_to_remove = scraperwiki.sqlite.select('*' + expr)
 for x in results_to_remove:
     print('Deleting expired data: {} ({})'.format(x['name'], x['code']))
 _ = scraperwiki.sqlite.execute('DELETE' + expr)
+
+scrape_finished_at = datetime.now().isoformat()
+save_status(scrape_started_at, scrape_finished_at, True)
