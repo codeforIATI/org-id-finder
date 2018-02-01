@@ -31,7 +31,7 @@ def save_status(started_at, finished_at=None, success=False):
 
 def fetch(url):
     print('Fetching: {}'.format(url))
-    r = requests.get(url)
+    r = requests.get(url, verify=False)
     time.sleep(0.5)
     return r
 
