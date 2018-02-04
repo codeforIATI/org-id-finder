@@ -1,7 +1,7 @@
 $(function() {
   function clearHash() {
     if ('pushState' in history) {
-      history.pushState("", document.title, window.location.pathname);
+      history.pushState('', document.title, window.location.pathname);
     } else {
       window.location.hash = '';
     }
