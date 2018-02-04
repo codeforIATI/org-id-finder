@@ -192,4 +192,19 @@ $(function() {
       $('#copy-button').tooltip('destroy');
     }, 500);
   });
+
+  $.ajax({
+      url: morphApiUrl,
+      dataType: 'jsonp',
+      data: {
+        key: morphApiKey,
+        query: 'SELECT `finished_at` FROM "status" WHERE `success` = 1 ORDER BY `finished_at` DESC LIMIT 1'
+      }
+  }).done(function(val) {
+    var now = new Date();
+    var last_updated = new Date(val[0].finished_at);
+    var hours_ago = Math.round((now - last_updated) / 3.6e6);
+    var updated_str = hours_ago + ' hour' + ((hours_ago === 1) ? '' : 's') + ' ago';
+    $('#last-updated').text(' (last updated: ' + updated_str + ')');
+  });
 });
