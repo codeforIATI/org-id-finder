@@ -70,7 +70,7 @@ $(function() {
       data: function (params) {
         var query = {
           key: morphApiKey,
-          query: 'SELECT * FROM "organisations" WHERE `name` LIKE "%' + params.term + '%" OR `code` LIKE "%' + params.term +  '%" LIMIT 5'
+          query: 'SELECT * FROM "organisations" WHERE (`name` LIKE "%' + params.term + '%" OR `code` LIKE "%' + params.term +  '%") AND `self_reported` = 1 LIMIT 5'
         };
         return query;
       },
@@ -110,7 +110,7 @@ $(function() {
         dataType: 'jsonp',
         data: {
           key: morphApiKey,
-          query: 'SELECT * FROM "organisations" WHERE `code` = "' + code + '" AND lang = "' + lang + '"'
+          query: 'SELECT * FROM "organisations" WHERE `code` = "' + code + '" AND lang = "' + lang + '" AND `self_reported` = 1'
         }
     }).then(function (d) {
       if (d.length === 0) {
