@@ -24,6 +24,7 @@ def save_status(started_at, finished_at=None, success=False):
 scrape_started_at = datetime.now().isoformat()
 save_status(scrape_started_at)
 
+key = ['code', 'lang', 'self_reported']
 datasets = orgidfinder.fetch_org_datasets_from_registry()
 for dataset_name, url in datasets:
     try:
@@ -36,7 +37,7 @@ for dataset_name, url in datasets:
         continue
     for org_info in org_infos:
         org_info['updated_at'] = datetime.now().isoformat()
-        scraperwiki.sqlite.save(['code', 'lang'], org_info, 'organisations')
+        scraperwiki.sqlite.save(key, org_info, 'organisations')
 
 # remove old data
 expr = ' FROM organisations WHERE updated_at < "{}"'.format(scrape_started_at)
