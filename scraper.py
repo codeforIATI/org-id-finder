@@ -35,7 +35,7 @@ for dataset_name, url in datasets:
         print(str(e))
         continue
     for org_info in org_infos:
-        org_info['updated_at'] = scrape_started_at
+        org_info['updated_at'] = datetime.now().isoformat()
         scraperwiki.sqlite.save(['code', 'lang'], org_info, 'organisations')
 
 # remove old data
