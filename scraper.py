@@ -25,6 +25,7 @@ scrape_started_at = datetime.now().isoformat()
 save_status(scrape_started_at)
 
 key = ['org_id', 'lang', 'self_reported']
+guide = orgidfinder.setup_guide()
 datasets = orgidfinder.fetch_org_datasets_from_registry()
 for dataset_name, url in datasets:
     try:
@@ -36,6 +37,12 @@ for dataset_name, url in datasets:
         print(str(e))
         continue
     for org_info in org_infos:
+        recommended_id = None
+        compatible_org_id = guide.get_suggested_id(org_info['org_id'])
+        if compatible_org_id != org_info['org_id']:
+            org_info['recommended_org_id'] = compatible_org_id
+        else:
+            org_info['recommended_org_id'] = None
         org_info['updated_at'] = datetime.now().isoformat()
         scraperwiki.sqlite.save(key, org_info, 'organisations')
 

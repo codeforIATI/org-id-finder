@@ -3,6 +3,8 @@ import time
 import requests
 from lxml import etree
 
+from . import orgidguide
+
 
 ns = 'http://www.w3.org/XML/1998/namespace'
 
@@ -133,3 +135,10 @@ def parse_org_file(dataset_name, url):
             row['source_dataset'] = dataset_name
             all_rows.append(row)
     return all_rows
+
+
+def setup_guide():
+    '''
+    Factory for OrgIDGuide
+    '''
+    return orgidguide.OrgIDGuide()
