@@ -103,8 +103,8 @@ def parse_org(organisation):
     for lang, lang_name in org_name.items():
         rows.append({
             'lang': lang,
-            'name': lang_name,
-            'name_en': org_name.get('en', '') if lang != 'en' else '',
+            'name': org_name.get('en', ''),
+            'name_local': lang_name if lang != 'en' else '',
             'code': org_code,
             'self_reported': self_reported,
         })
