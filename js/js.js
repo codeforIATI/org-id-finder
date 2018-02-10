@@ -48,10 +48,10 @@ $(function() {
       var term = search_query.term || '';
       var $highlightedName = markMatch(item.text, term);
       $highlightedName = $highlightedName.addClass('select2-rendered__name');
-      var $highlightedCode = markMatch(item.id, term);
-      $highlightedCode = $highlightedCode.addClass('select2-rendered__code');
+      var $highlightedOrgID = markMatch(item.id, term);
+      $highlightedOrgID = $highlightedOrgID.addClass('select2-rendered__org_id');
 
-      return $('<span>').append($highlightedName, $highlightedCode);
+      return $('<span>').append($highlightedName, $highlightedOrgID);
     },
     language: {
       errorLoading: function() {
@@ -70,20 +70,20 @@ $(function() {
       data: function (params) {
         var query = {
           key: morphApiKey,
-          query: 'SELECT * FROM "organisations" WHERE (`name` LIKE "%' + params.term + '%" OR `code` LIKE "%' + params.term +  '%") AND `self_reported` = 1 LIMIT 5'
+          query: 'SELECT * FROM "organisations" WHERE (`name` LIKE "%' + params.term + '%" OR `org_id` LIKE "%' + params.term +  '%") AND `self_reported` = 1 LIMIT 5'
         };
         return query;
       },
       processResults: function (data) {
         var results = $.map(data, function(d) {
           var text = d.name;
-          var hash = d.code;
+          var hash = d.org_id;
           if (d.name_en !== '') {
             text = text + ' (' + d.name_en + ')';
             hash = hash + '%20' + d.lang;
           }
           return {
-            id: d.code,
+            id: d.org_id,
             text: text,
             hash: hash,
             source_url: d.source_url,
@@ -100,7 +100,7 @@ $(function() {
   var pageHash = window.location.hash.substr(1);
   if (pageHash !== '') {
     var pageHashArr = pageHash.split('%20');
-    var code = pageHashArr[0];
+    var org_id = pageHashArr[0];
     var lang = 'en';
     if (pageHashArr.length > 1) {
       lang = pageHashArr[1];
@@ -110,7 +110,7 @@ $(function() {
         dataType: 'jsonp',
         data: {
           key: morphApiKey,
-          query: 'SELECT * FROM "organisations" WHERE `code` = "' + code + '" AND lang = "' + lang + '" AND `self_reported` = 1'
+          query: 'SELECT * FROM "organisations" WHERE `org_id` = "' + org_id + '" AND lang = "' + lang + '" AND `self_reported` = 1'
         }
     }).then(function (d) {
       if (d.length === 0) {
@@ -118,13 +118,13 @@ $(function() {
       } else {
         d = d[0];
         var text = d.name;
-        var hash = d.code;
+        var hash = d.org_id;
         if (d.name_en !== '') {
           text = text + ' (' + d.name_en + ')';
           hash = hash + '%20' + d.lang;
         }
         var data = {
-          id: d.code,
+          id: d.org_id,
           text: text,
           hash: hash,
           source_url: d.source_url,

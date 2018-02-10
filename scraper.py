@@ -24,7 +24,7 @@ def save_status(started_at, finished_at=None, success=False):
 scrape_started_at = datetime.now().isoformat()
 save_status(scrape_started_at)
 
-key = ['code', 'lang', 'self_reported']
+key = ['org_id', 'lang', 'self_reported']
 datasets = orgidfinder.fetch_org_datasets_from_registry()
 for dataset_name, url in datasets:
     try:
@@ -43,7 +43,7 @@ for dataset_name, url in datasets:
 expr = ' FROM organisations WHERE updated_at < "{}"'.format(scrape_started_at)
 results_to_remove = scraperwiki.sqlite.select('*' + expr)
 for x in results_to_remove:
-    print('Deleting expired data: {} ({})'.format(x['name'], x['code']))
+    print('Deleting expired data: {} ({})'.format(x['name'], x['org_id']))
 _ = scraperwiki.sqlite.execute('DELETE' + expr)
 
 scrape_finished_at = datetime.now().isoformat()

@@ -68,11 +68,11 @@ def get_text(el, path, default_lang):
 def parse_org(organisation):
     self_reported = True
     reporting_name = None
-    reporting_code = None
+    reporting_org_id = None
     default_lang = organisation.attrib.get('{{{}}}lang'.format(ns), 'en')
     try:
         reporting_name = get_text(organisation, 'reporting-org', default_lang)
-        reporting_code = organisation.find('reporting-org').get('ref')
+        reporting_org_id = organisation.find('reporting-org').get('ref')
     except:
         # no reporting org, so we have to assume this is
         # not self reported
@@ -82,20 +82,20 @@ def parse_org(organisation):
         org_name = get_text(organisation, 'name', default_lang)
         try:
             # v1.0x
-            org_code = organisation.find(
+            org_id = organisation.find(
                 'iati-identifier').text
         except AttributeError:
             # v2.0x
-            org_code = organisation.find(
+            org_id = organisation.find(
                 'organisation-identifier').text
-        if reporting_code and org_code != reporting_code:
-            # reporting org code and org code don't match
+        if reporting_org_id and org_id != reporting_org_id:
+            # reporting org ID and org ID don't match
             self_reported = False
     except AttributeError:
         # couldn't find an org name, so just use reporting-org
-        if reporting_name and reporting_code:
+        if reporting_name and reporting_org_id:
             org_name = reporting_name
-            org_code = reporting_code
+            org_id = reporting_org_id
         else:
             return []
 
@@ -105,7 +105,7 @@ def parse_org(organisation):
             'lang': lang,
             'name': lang_name,
             'name_en': org_name.get('en', '') if lang != 'en' else '',
-            'code': org_code,
+            'org_id': org_id,
             'self_reported': self_reported,
         })
     return rows
