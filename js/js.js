@@ -105,7 +105,6 @@ $(function() {
     if (pageHashArr.length > 1) {
       lang = pageHashArr[1];
     }
-    console.log(lang);
     $.get({
         url: morphApiUrl,
         dataType: 'jsonp',
