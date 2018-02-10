@@ -70,7 +70,7 @@ $(function() {
       data: function (params) {
         var query = {
           key: morphApiKey,
-          query: 'SELECT * FROM "organisations" WHERE (`name_local` LIKE "%' + params.term + '%" OR `code` LIKE "%' + params.term +  '%") AND `self_reported` = 1 LIMIT 5'
+          query: 'SELECT * FROM "organisations" WHERE (`name` LIKE "%' + params.term + '%" OR `code` LIKE "%' + params.term +  '%") AND `self_reported` = 1 LIMIT 5'
         };
         return query;
       },
@@ -78,8 +78,8 @@ $(function() {
         var results = $.map(data, function(d) {
           var text = d.name;
           var hash = d.code;
-          if (d.name_local !== '') {
-            text = d.name_local + ' (' + text + ')';
+          if (d.name_en !== '') {
+            text = text + ' (' + d.name_en + ')';
             hash = hash + '%20' + d.lang;
           }
           return {
@@ -119,8 +119,8 @@ $(function() {
         d = d[0];
         var text = d.name;
         var hash = d.code;
-        if (d.name_local !== '') {
-          text = d.name_local + ' (' + text + ')';
+        if (d.name_en !== '') {
+          text = text + ' (' + d.name_en + ')';
           hash = hash + '%20' + d.lang;
         }
         var data = {
@@ -132,7 +132,7 @@ $(function() {
         };
 
         // create the option and append to Select2
-        var option = new Option(text, d.id, true, true);
+        var option = new Option(d.name, d.id, true, true);
         orgSelect.append(option).trigger('change');
 
         // manually trigger the `select2:select` event
