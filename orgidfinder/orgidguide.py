@@ -50,12 +50,12 @@ class OrgIDGuide():
         return {x['name_en'].upper(): x for x in dac_donors_data}
 
     @property
-    @_cache('iati_country_codes')
-    def _iati_country_codes(self):
-        xi_iati_url = 'http://iatistandard.org/202/codelists/downloads/' + \
-                      'clv2/json/en/Country.json'
-        xi_iati_data = requests.get(xi_iati_url).json()['data']
-        return {x['code']: x for x in xi_iati_data}
+    @_cache('country_codes')
+    def _country_codes(self):
+        country_codes_url = 'https://datahub.io/core/' + \
+                      'country-codes/r/country-codes.json'
+        country_codes_url_data = requests.get(country_codes_url).json()
+        return {x['ISO3166-1-Alpha-2']: x for x in country_codes_url_data}
 
     @property
     @_cache('xi_iati_codes')
@@ -106,9 +106,10 @@ class OrgIDGuide():
         if dac_donor_code_match:
             # looks like a donor code
             country_code, agency_code = dac_donor_code_match.groups()
-            country = self._iati_country_codes.get(country_code)
+            country = self._country_codes.get(country_code)
             if country:
-                dac_donor = self._dac_donor_codes.get(country['name'])
+                country_name = country['official_name_en'].upper()
+                dac_donor = self._dac_donor_codes.get(country_name)
                 if dac_donor:
                     return 'XM-DAC-{country}-{agency}'.format(
                         country=dac_donor['code'],
