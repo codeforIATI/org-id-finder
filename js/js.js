@@ -1,4 +1,4 @@
-$(function() {
+$(window).on('load', function() {
   function clearHash() {
     if ('pushState' in history) {
       history.pushState('', document.title, window.location.pathname);
