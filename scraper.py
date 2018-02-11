@@ -37,12 +37,8 @@ for dataset_name, url in datasets:
         print(str(e))
         continue
     for org_info in org_infos:
-        recommended_id = None
-        compatible_org_id = guide.get_suggested_id(org_info['org_id'])
-        if compatible_org_id != org_info['org_id']:
-            org_info['recommended_org_id'] = compatible_org_id
-        else:
-            org_info['recommended_org_id'] = None
+        org_info['recommended_org_id'] = guide.get_suggested_id(
+            org_info['org_id'])
         org_info['updated_at'] = datetime.now().isoformat()
         scraperwiki.sqlite.save(key, org_info, 'organisations')
 
