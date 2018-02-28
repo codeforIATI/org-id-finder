@@ -65,6 +65,7 @@ $(window).on('load', function() {
     placeholder: 'E.g. Publish What You Fund',
     minimumInputLength: 2,
     ajax: {
+      delay: 100,
       url: morphApiUrl,
       dataType: 'jsonp',
       data: function (params) {
