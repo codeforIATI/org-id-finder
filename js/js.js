@@ -81,6 +81,8 @@ $(window).on('load', function() {
           var hash = d.org_id;
           if (d.name_en !== '') {
             text = text + ' (' + d.name_en + ')';
+          }
+          if (d.lang !== 'en') {
             hash = hash + '%20' + d.lang;
           }
           return {
@@ -122,6 +124,8 @@ $(window).on('load', function() {
             var hash = d.org_id;
             if (d.name_en !== '') {
               text = text + ' (' + d.name_en + ')';
+            }
+            if (d.lang !== 'en') {
               hash = hash + '%20' + d.lang;
             }
             var data = {
