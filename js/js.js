@@ -105,44 +105,45 @@ $(window).on('load', function() {
     if (pageHashArr.length > 1) {
       lang = pageHashArr[1];
     }
-    $.get({
+    $.ajax({
         url: morphApiUrl,
         dataType: 'jsonp',
         data: {
           key: morphApiKey,
           query: 'SELECT * FROM "organisations" WHERE `org_id` = "' + org_id + '" AND lang = "' + lang + '" AND `self_reported` = 1'
-        }
-    }).then(function (d) {
-      if (d.length === 0) {
-        clearHash();
-      } else {
-        d = d[0];
-        var text = d.name;
-        var hash = d.org_id;
-        if (d.name_en !== '') {
-          text = text + ' (' + d.name_en + ')';
-          hash = hash + '%20' + d.lang;
-        }
-        var data = {
-          id: d.org_id,
-          text: text,
-          hash: hash,
-          source_url: d.source_url,
-          source_dataset: d.source_dataset
-        };
-
-        // create the option and append to Select2
-        var option = new Option(d.name, d.id, true, true);
-        orgSelect.append(option).trigger('change');
-
-        // manually trigger the `select2:select` event
-        orgSelect.trigger({
-            type: 'select2:select',
-            params: {
-                data: data
+        },
+        success: function(d) {
+          if (d.length === 0) {
+            clearHash();
+          } else {
+            d = d[0];
+            var text = d.name;
+            var hash = d.org_id;
+            if (d.name_en !== '') {
+              text = text + ' (' + d.name_en + ')';
+              hash = hash + '%20' + d.lang;
             }
-        });
-      }
+            var data = {
+              id: d.org_id,
+              text: text,
+              hash: hash,
+              source_url: d.source_url,
+              source_dataset: d.source_dataset
+            };
+
+            // create the option and append to Select2
+            var option = new Option(d.name, d.id, true, true);
+            orgSelect.append(option).trigger('change');
+
+            // manually trigger the `select2:select` event
+            orgSelect.trigger({
+                type: 'select2:select',
+                params: {
+                    data: data
+                }
+            });
+          }
+        }
     });
   }
 
@@ -198,12 +199,13 @@ $(window).on('load', function() {
       data: {
         key: morphApiKey,
         query: 'SELECT `finished_at` FROM "status" WHERE `success` = 1 ORDER BY `finished_at` DESC LIMIT 1'
+      },
+      success: function(val) {
+        var now = new Date();
+        var last_updated = new Date(val[0].finished_at);
+        var hours_ago = Math.round((now - last_updated) / 3.6e6);
+        var updated_str = hours_ago + ' hour' + ((hours_ago === 1) ? '' : 's') + ' ago';
+        $('#last-updated').text(' (last updated: ' + updated_str + ')');
       }
-  }).done(function(val) {
-    var now = new Date();
-    var last_updated = new Date(val[0].finished_at);
-    var hours_ago = Math.round((now - last_updated) / 3.6e6);
-    var updated_str = hours_ago + ' hour' + ((hours_ago === 1) ? '' : 's') + ' ago';
-    $('#last-updated').text(' (last updated: ' + updated_str + ')');
   });
 });
