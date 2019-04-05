@@ -85,7 +85,7 @@ $(window).on('load', function() {
         var results = $.map(data, function (d) {
           var text = d.name;
           var hash = d.org_id;
-          if (d.name_en !== d.name) {
+          if (d.name_en !== d.name && d.name_en !== '') {
             text = text + ' (' + d.name_en + ')';
           }
           if (d.lang !== 'en') {
@@ -131,7 +131,7 @@ $(window).on('load', function() {
             d = d[0];
             var text = d.name;
             var hash = d.org_id;
-            if (d.name_en !== d.name) {
+            if (d.name_en !== d.name && d.name_en !== '') {
               text = text + ' (' + d.name_en + ')';
             }
             if (d.lang !== 'en') {
