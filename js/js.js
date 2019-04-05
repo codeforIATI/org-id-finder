@@ -69,14 +69,16 @@ $(window).on('load', function() {
       url: morphApiUrl,
       dataType: 'jsonp',
       data: function (params) {
+        var page = parseInt(params.page || 0);
         var query = {
           key: morphApiKey,
-          query: 'SELECT * FROM "organisations" WHERE (`name` LIKE "%' + params.term + '%" OR `org_id` LIKE "%' + params.term +  '%") AND `self_reported` = 1 LIMIT 5'
+          query: 'SELECT * FROM "organisations" WHERE (`name` LIKE "%' + params.term + '%" OR `org_id` LIKE "%' + params.term +  '%") AND `self_reported` = 1 LIMIT 6 OFFSET ' + (page * 5)
         };
         return query;
       },
       processResults: function (data) {
-        var results = $.map(data, function(d) {
+        var results = data.slice(0, -1);
+        var results = $.map(results, function (d) {
           var text = d.name;
           var hash = d.org_id;
           if (d.name_en !== d.name) {
@@ -94,7 +96,10 @@ $(window).on('load', function() {
           };
         });
         return {
-          results: results
+          results: results,
+          pagination: {
+            more: (data.length === 6)
+          }
         };
       }
     }

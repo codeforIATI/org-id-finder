@@ -165,3 +165,7 @@ h1,
 .select2-rendered__match {
   font-weight: bold;
 }
+
+.select2-container--bootstrap .select2-results > .select2-results__options {
+  max-height: 180px;
+}
