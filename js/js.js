@@ -77,8 +77,12 @@ $(window).on('load', function() {
         return query;
       },
       processResults: function (data) {
-        var results = data.slice(0, -1);
-        var results = $.map(results, function (d) {
+        var more = false;
+        if (data.length === 6) {
+          data = data.slice(0, -1);
+          more = true;
+        }
+        var results = $.map(data, function (d) {
           var text = d.name;
           var hash = d.org_id;
           if (d.name_en !== d.name) {
@@ -98,7 +102,7 @@ $(window).on('load', function() {
         return {
           results: results,
           pagination: {
-            more: (data.length === 6)
+            more: more
           }
         };
       }
