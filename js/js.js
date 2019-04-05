@@ -69,10 +69,10 @@ $(window).on('load', function() {
       url: morphApiUrl,
       dataType: 'jsonp',
       data: function (params) {
-        var page = parseInt(params.page || 0);
+        var page = parseInt(params.page || 1);
         var query = {
           key: morphApiKey,
-          query: 'SELECT * FROM "organisations" WHERE (`name` LIKE "%' + params.term + '%" OR `org_id` LIKE "%' + params.term +  '%") AND `self_reported` = 1 LIMIT 6 OFFSET ' + (page * 5)
+          query: 'SELECT * FROM "organisations" WHERE (`name` LIKE "%' + params.term + '%" OR `org_id` LIKE "%' + params.term +  '%") AND `self_reported` = 1 LIMIT 6 OFFSET ' + ((page - 1) * 5)
         };
         return query;
       },
