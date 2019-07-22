@@ -35,7 +35,7 @@ $(window).on('load', function() {
     return $result;
   }
 
-  var morphApiUrl = 'https://api.morph.io/andylolz/org-id-finder/data.json';
+  var morphApiUrl = 'https://api.morph.io/codeforIATI/org-id-finder/data.json';
   var morphApiKey = 'wFTSIH61nwMjLBhphd4T';
 
   var orgSelect = $('#org-select').select2({
