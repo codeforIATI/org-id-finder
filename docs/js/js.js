@@ -95,6 +95,8 @@ $(window).on('load', function() {
             id: d.org_id,
             text: text,
             hash: hash,
+            org_type_code: d.org_type_code,
+            org_type: d.org_type,
             source_url: d.source_url,
             source_dataset: d.source_dataset
           };
@@ -141,6 +143,8 @@ $(window).on('load', function() {
               id: d.org_id,
               text: text,
               hash: hash,
+              org_type_code: d.org_type_code,
+              org_type: d.org_type,
               source_url: d.source_url,
               source_dataset: d.source_dataset
             };
@@ -168,6 +172,11 @@ $(window).on('load', function() {
     $selected.text(e.params.data.text);
 
     var identifier = e.params.data.id;
+    var org_type_code = e.params.data.org_type_code;
+    var org_type = e.params.data.org_type;
+    if (org_type) {
+      org_type = org_type + ' (' + org_type_code + ')';
+    }
     var sourceUrl = e.params.data.source_url;
     var sourceDataset = e.params.data.source_dataset;
 
@@ -181,6 +190,7 @@ $(window).on('load', function() {
     $('#source-registry').attr('href', registryUrl);
 
     $('#org-identifier').val(identifier);
+    $('#org-type').val(org_type);
     $('#org-identifier-group').css('visibility', 'visible').hide().fadeIn('slow');
     $('body').animate({
       backgroundColor: '#353'
