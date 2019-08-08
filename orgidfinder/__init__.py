@@ -91,7 +91,10 @@ def parse_org(organisation):
             # v2.0x
             org_id = organisation.find(
                 'organisation-identifier').text
-        if reporting_org_id and org_id != reporting_org_id:
+        if not reporting_org_id:
+            org_type_code = None
+            self_reported = False
+        elif org_id != reporting_org_id:
             # reporting org ID and org ID don't match
             org_type_code = None
             self_reported = False
