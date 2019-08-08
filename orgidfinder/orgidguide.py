@@ -65,6 +65,14 @@ class OrgIDGuide():
         xi_iati_data = requests.get(xi_iati_url).json()['data']
         return {x['code']: x for x in xi_iati_data}
 
+    @property
+    @_cache('org_types')
+    def _org_types(self):
+        org_type_url = 'http://iatistandard.org/202/codelists/downloads/' + \
+                       'clv2/json/en/OrganisationType.json'
+        org_type_data = requests.get(org_type_url).json()['data']
+        return {x['code']: x for x in org_type_data}
+
     def lookup_prefix(self, prefix):
         return self._org_id_guide.get(prefix)
 

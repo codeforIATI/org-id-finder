@@ -37,6 +37,7 @@ for dataset_name, url in datasets:
         print(str(e))
         continue
     for org_info in org_infos:
+        org_info['org_type'] = guide._org_types.get(org_info['org_type_code'])
         org_info['valid_org_id'] = True
         suggested_org_id = guide.get_suggested_id(org_info['org_id'])
         if suggested_org_id != org_info['org_id']:

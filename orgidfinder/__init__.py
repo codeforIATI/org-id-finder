@@ -75,6 +75,7 @@ def parse_org(organisation):
     try:
         reporting_name = get_text(organisation, 'reporting-org', default_lang)
         reporting_org_id = organisation.find('reporting-org').get('ref')
+        org_type_code = organisation.find('reporting-org').get('type')
     except:
         # no reporting org, so we have to assume this is
         # not self reported
@@ -92,6 +93,7 @@ def parse_org(organisation):
                 'organisation-identifier').text
         if reporting_org_id and org_id != reporting_org_id:
             # reporting org ID and org ID don't match
+            org_type_code = None
             self_reported = False
     except AttributeError:
         # couldn't find an org name, so just use reporting-org
@@ -108,6 +110,7 @@ def parse_org(organisation):
             'name': lang_name,
             'name_en': org_name.get('en', ''),
             'org_id': org_id,
+            'org_type_code': org_type_code,
             'self_reported': self_reported,
         })
     return rows
