@@ -60,16 +60,16 @@ class OrgIDGuide():
     @property
     @_cache('xi_iati_codes')
     def _xi_iati_codes(self):
-        xi_iati_url = 'https://codelists.codeforiati.org/api/json/en/' + \
-                      'IATIOrganisationIdentifier.json'
+        xi_iati_url = 'http://iatistandard.org/202/codelists/downloads/' + \
+                      'clv2/json/en/IATIOrganisationIdentifier.json'
         xi_iati_data = requests.get(xi_iati_url).json()['data']
         return {x['code']: x for x in xi_iati_data}
 
     @property
     @_cache('org_types')
     def _org_types(self):
-        org_type_url = 'https://codelists.codeforiati.org/api/json/en/' + \
-                       'OrganisationType.json'
+        org_type_url = 'http://iatistandard.org/202/codelists/downloads/' + \
+                       'clv2/json/en/OrganisationType.json'
         org_type_data = requests.get(org_type_url).json()['data']
         return {x['code']: x['name'] for x in org_type_data}
 
