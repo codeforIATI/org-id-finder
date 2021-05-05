@@ -1,5 +1,6 @@
 # jekyll
-/_site
+/docs
+/__iatikitcache__
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
