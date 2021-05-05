@@ -1,55 +1,7 @@
-import time
-
-import requests
-from lxml import etree
-
 from . import orgidguide
 
 
 ns = 'http://www.w3.org/XML/1998/namespace'
-
-
-class FetchError(Exception):
-    pass
-
-
-class ParseError(Exception):
-    pass
-
-
-def fetch(url):
-    print('Fetching: {}'.format(url))
-    try:
-        r = requests.get(url)
-        time.sleep(0.5)
-    except requests.exceptions.SSLError:
-        r = requests.get(url, verify=False)
-        time.sleep(0.5)
-    return r
-
-
-def fetch_org_datasets_from_registry():
-    rows = 1000
-    tmpl = 'https://iatiregistry.org/api/3/action/package_search?' + \
-           'q=extras_filetype:organisation&start={{}}&rows={}'.format(rows)
-    page = 1
-    data = []
-    while True:
-        start = (page - 1) * rows
-        j = fetch(tmpl.format(start)).json()
-        cur_data = j['result']['results']
-        if cur_data == []:
-            break
-        data += cur_data
-        page += 1
-
-    orgs = []
-    for d in data:
-        if len(d['resources']) == 0:
-            continue
-        orgs.append((d['name'], d['resources'][0]['url']))
-
-    return orgs
 
 
 def get_text(el, path, default_lang):
@@ -71,26 +23,19 @@ def parse_org(organisation):
     self_reported = True
     reporting_name = None
     reporting_org_id = None
-    default_lang = organisation.attrib.get('{{{}}}lang'.format(ns), 'en')
+    default_lang = organisation.etree.attrib.get('{{{}}}lang'.format(ns), 'en')
     try:
-        reporting_name = get_text(organisation, 'reporting-org', default_lang)
-        reporting_org_id = organisation.find('reporting-org').get('ref')
-        org_type_code = organisation.find('reporting-org').get('type')
+        reporting_name = get_text(organisation.etree, 'reporting-org', default_lang)
+        reporting_org_id = organisation.etree.find('reporting-org').get('ref')
+        org_type_code = organisation.etree.find('reporting-org').get('type')
     except:
         # no reporting org, so we have to assume this is
         # not self reported
         self_reported = False
 
     try:
-        org_name = get_text(organisation, 'name', default_lang)
-        try:
-            # v1.0x
-            org_id = organisation.find(
-                'iati-identifier').text
-        except AttributeError:
-            # v2.0x
-            org_id = organisation.find(
-                'organisation-identifier').text
+        org_name = get_text(organisation.etree, 'name', default_lang)
+        org_id = organisation.id
         if not reporting_org_id:
             org_type_code = None
             self_reported = False
@@ -119,26 +64,13 @@ def parse_org(organisation):
     return rows
 
 
-def parse_org_file(dataset_name, url):
-    try:
-        r = fetch(url)
-    except requests.exceptions.ConnectionError:
-        err = 'Error! Failed to fetch: {}'.format(url)
-        raise FetchError(err)
-    try:
-        xml = etree.fromstring(r.content)
-    except etree.XMLSyntaxError:
-        err = 'Error! Failed to parse: {}'.format(url)
-        raise ParseError(err)
-    xpath = '//iati-organisation'
-    organisations = xml.xpath(xpath)
-
+def parse_org_file(dataset):
     all_rows = []
-    for organisation in organisations:
+    for organisation in dataset.organisations:
         rows = parse_org(organisation)
         for row in rows:
-            row['source_url'] = url
-            row['source_dataset'] = dataset_name
+            row['source_url'] = dataset.metadata['resources'][0]['url']
+            row['source_dataset'] = dataset.name
             all_rows.append(row)
     return all_rows
 
