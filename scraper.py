@@ -18,7 +18,7 @@ def zip_discard_compr(*iterables, sentinel=None):
 output_dir = Path('docs')
 scrape_started_at = datetime.now().isoformat()
 
-# iatikit.download.data()
+iatikit.download.data()
 
 guide = orgidfinder.setup_guide()
 
