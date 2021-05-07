@@ -1,57 +1,73 @@
+import csv
+import json
+from pathlib import Path
+from collections import defaultdict
+from itertools import zip_longest
+from urllib.parse import quote_plus
 from os import environ
 from datetime import datetime
 
 import orgidfinder
 
-# hack to override sqlite database filename
-# see: https://help.morph.io/t/using-python-3-with-morph-scraperwiki-fork/148
-environ['SCRAPERWIKI_DATABASE_NAME'] = 'sqlite:///data.sqlite'
-import scraperwiki
+import iatikit
 
+def zip_discard_compr(*iterables, sentinel=None):
+    return [[entry for entry in iterable if entry is not sentinel]
+            for iterable in zip_longest(*iterables, fillvalue=sentinel)]
 
-def save_status(started_at, finished_at=None, success=False):
-    scraperwiki.sqlite.save(
-        ['started_at'],
-        {
-            'started_at': started_at,
-            'finished_at': finished_at,
-            'success': success,
-        },
-        'status'
-    )
-
-
+output_dir = Path('docs')
 scrape_started_at = datetime.now().isoformat()
-save_status(scrape_started_at)
 
-key = ['org_id', 'lang', 'self_reported']
+# iatikit.download.data()
+
 guide = orgidfinder.setup_guide()
-datasets = orgidfinder.fetch_org_datasets_from_registry()
-for dataset_name, url in datasets:
-    try:
-        org_infos = orgidfinder.parse_org_file(dataset_name, url)
-    except orgidfinder.ParseError as e:
-        print(str(e))
-        continue
-    except orgidfinder.FetchError as e:
-        print(str(e))
-        continue
+
+data = []
+for dataset in iatikit.data().datasets.where(filetype='organisation'):
+    org_infos = orgidfinder.parse_org_file(dataset)
     for org_info in org_infos:
         org_info['org_type'] = guide._org_types.get(org_info['org_type_code'])
-        org_info['valid_org_id'] = True
-        suggested_org_id = guide.get_suggested_id(org_info['org_id'])
-        if suggested_org_id != org_info['org_id']:
-            org_info['valid_org_id'] = False
-            org_info['suggested_org_id'] = suggested_org_id
-        org_info['updated_at'] = datetime.now().isoformat()
-        scraperwiki.sqlite.save(key, org_info, 'organisations')
+        id_ = quote_plus(org_info['org_id'].lower())
+        with open(Path(f'{output_dir}/data/{id_}.json'), 'w') as f:
+            json.dump(org_info, f)
+        data.append(org_info)
 
-# remove old data
-expr = ' FROM organisations WHERE updated_at < "{}"'.format(scrape_started_at)
-results_to_remove = scraperwiki.sqlite.select('*' + expr)
-for x in results_to_remove:
-    print('Deleting expired data: {} ({})'.format(x['name'], x['org_id']))
-_ = scraperwiki.sqlite.execute('DELETE' + expr)
+with open(Path(f'docs/downloads/org-ids.json'), 'w') as f:
+    json.dump(data, f)
+
+fieldnames = ['org_id', 'name', 'org_type', 'org_type_code', 'source_dataset', 'source_url']
+with open(Path(f'docs/downloads/org-ids.csv'), 'w') as f:
+    w = csv.DictWriter(f, fieldnames=fieldnames)
+    w.writeheader()
+    for d in data:
+        w.writerow({f: d.get(f, '') if f != 'name' else d['name'][d['lang']] for f in fieldnames})
+
+counter = defaultdict(list)
+minlen = 3
+for d in data:
+    default_lang = d['lang']
+    default_name = d['name'].get(default_lang)
+
+    text = d['org_id'].lower()
+    for subtext in set([text[i: j] for i in range(len(text)) for j in range(i + 1, len(text) + 1) if len(text[i:j]) == minlen]):
+        counter[subtext].append((default_name, d['org_id']))
+
+    for lang, name in d['name'].items():
+        text = name.lower()
+        if lang != default_lang:
+            name += ' ({})'.format(d['name'][default_lang])
+        for subtext in set([text[i: j] for i in range(len(text)) for j in range(i + 1, len(text) + 1) if len(text[i:j]) == minlen]):
+            counter[subtext].append((name, d['org_id']))
+
+for k, v in sorted(counter.items()):
+    sorted_v = sorted(v, key=lambda x: x[0])
+    quoted_k = quote_plus(k)
+    with open(Path(f'{output_dir}/data/lookup/{quoted_k}.json'), 'w') as f:
+        json.dump(v, f)
 
 scrape_finished_at = datetime.now().isoformat()
-save_status(scrape_started_at, scrape_finished_at, True)
+with(open(Path(f'{output_dir}/data/status.json'), 'w')) as f:
+    json.dump({
+        'started_at': scrape_started_at,
+        'finished_at': scrape_finished_at,
+    }, f)
