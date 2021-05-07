@@ -29,8 +29,8 @@ jobs:
     - name: Deploy 🚀
       uses: JamesIves/github-pages-deploy-action@3.7.1
       with:
-        GIT_CONFIG_NAME: Code for IATI bot
-        GIT_CONFIG_EMAIL: 57559326+codeforIATIbot@users.noreply.github.com
+        # GIT_CONFIG_NAME: Code for IATI bot
+        # GIT_CONFIG_EMAIL: 57559326+codeforIATIbot@users.noreply.github.com
         BRANCH: gh-pages
         FOLDER: docs
         CLEAN: true
