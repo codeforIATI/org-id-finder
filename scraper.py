@@ -27,7 +27,7 @@ for dataset in iatikit.data().datasets.where(filetype='organisation'):
     org_infos = orgidfinder.parse_org_file(dataset)
     for org_info in org_infos:
         org_info['org_type'] = guide._org_types.get(org_info['org_type_code'])
-        id_ = quote_plus(org_info['org_id'].lower())
+        id_ = quote_plus(org_info['org_id'])
         with open(Path(f'{output_dir}/data/{id_}.json'), 'w') as f:
             json.dump(org_info, f)
         data.append(org_info)
