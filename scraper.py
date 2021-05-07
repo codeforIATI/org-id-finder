@@ -65,7 +65,7 @@ for k, v in sorted(counter.items()):
     sorted_v = sorted(v, key=lambda x: x[0])
     quoted_k = quote_plus(k)
     with open(Path(f'{output_dir}/data/lookup/{quoted_k}.json'), 'w') as f:
-        json.dump(v, f)
+        json.dump(sorted_v, f)
 
 scrape_finished_at = datetime.now().isoformat()
 with(open(Path(f'{output_dir}/data/status.json'), 'w')) as f:
