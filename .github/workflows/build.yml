@@ -26,7 +26,7 @@ jobs:
     - name: Add static files to output
       run: cp -r static docs
     - name: Run the scraper
-      run: python scraper.py
+      run: python scraper.py --refresh
     - name: Deploy 🚀
       uses: JamesIves/github-pages-deploy-action@3.7.1
       with:

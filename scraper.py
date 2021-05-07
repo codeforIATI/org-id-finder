@@ -1,5 +1,6 @@
 import csv
 import json
+import sys
 from pathlib import Path
 from collections import defaultdict
 from itertools import zip_longest
@@ -18,7 +19,8 @@ def zip_discard_compr(*iterables, sentinel=None):
 output_dir = Path('docs')
 scrape_started_at = datetime.now().isoformat()
 
-iatikit.download.data()
+if len(sys.argv) > 1 and sys.argv[1] == '--refresh':
+    iatikit.download.data()
 
 guide = orgidfinder.setup_guide()
 
