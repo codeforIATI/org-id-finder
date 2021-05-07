@@ -44,7 +44,7 @@ with open(Path(f'docs/downloads/org-ids.csv'), 'w') as f:
     for d in data:
         w.writerow({f: d.get(f, '') if f != 'name' else d['name'][d['lang']] for f in fieldnames})
 
-counter = defaultdict(list)
+counter = defaultdict(set)
 minlen = 3
 for d in data:
     default_lang = d['lang']
@@ -52,14 +52,14 @@ for d in data:
 
     text = d['org_id'].lower()
     for subtext in set([text[i: j] for i in range(len(text)) for j in range(i + 1, len(text) + 1) if len(text[i:j]) == minlen]):
-        counter[subtext].append((default_name, d['org_id']))
+        counter[subtext].add((default_name, d['org_id']))
 
     for lang, name in d['name'].items():
         text = name.lower()
         if lang != default_lang:
             name += ' ({})'.format(d['name'][default_lang])
         for subtext in set([text[i: j] for i in range(len(text)) for j in range(i + 1, len(text) + 1) if len(text[i:j]) == minlen]):
-            counter[subtext].append((name, d['org_id']))
+            counter[subtext].add((name, d['org_id']))
 
 for k, v in sorted(counter.items()):
     sorted_v = sorted(v, key=lambda x: x[0])
