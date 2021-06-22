@@ -12,13 +12,13 @@ However, there’s no single database for these references (there’s just a [li
 
     > how should I refer to my implementing partner in activity x?
 
- * It’s difficult to do a reverse lookup i.e. get from an organisation identifier to an organisation name. For instance, [the example provided here](https://discuss.iatistandard.org/t/data-use-observation-a-reference-for-an-organisation-alone-is-not-enough/1091) is:
+ * It’s difficult to do a reverse lookup i.e. get from an organisation identifier to an organisation name. For instance, [the example provided here](https://discuss.codeforiati.org/t/data-use-observation-a-reference-for-an-organisation-alone-is-not-enough/1091) is:
 
     > which organisation does `NL-KVK-41198677` refer to?
 
 ## Why take this approach?
 
-This works (more or less) as described by @stevieflow [on IATI discuss](https://discuss.iatistandard.org/t/getting-to-a-list-of-organisation-references-for-iati-publishers/1060). This approach is great because:
+This works (more or less) as described by @stevieflow [on IATI discuss](https://discuss.codeforiati.org/t/getting-to-a-list-of-organisation-references-for-iati-publishers/1060). This approach is great because:
 
  1. It’s very simple to understand
  2. It’s very easy to automate
