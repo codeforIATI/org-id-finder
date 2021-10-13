@@ -1,4 +1,4 @@
-# IATI Organisation ID Lookup
+# Organisation ID Finder
 
 Search organisation names to find their respective organisation identifiers (and vice versa), using data from IATI organisation files.
 
