@@ -22,7 +22,10 @@ def get_text(el, path, default_lang):
 
 def parse_org(organisation):
     org_id = organisation.id
-    reporting_org_id = organisation.etree.find('reporting-org').get('ref')
+    reporting_org = organisation.etree.find('reporting-org')
+    if not reporting_org:
+        return None
+    reporting_org_id = reporting_org.get('ref')
     if not reporting_org_id or org_id != reporting_org_id:
         return None
 
