@@ -28,6 +28,7 @@ jobs:
     - name: Run the scraper
       run: python scraper.py --refresh
     - name: Deploy 🚀
+      if: ${{ github.ref == 'refs/heads/main' }}
       uses: JamesIves/github-pages-deploy-action@3.7.1
       with:
         GIT_CONFIG_NAME: Code for IATI bot
