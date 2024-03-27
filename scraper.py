@@ -50,12 +50,16 @@ minlen = 3
 for d in data:
     default_lang = d['lang']
     default_name = d['name'].get(default_lang)
+    if not default_name:
+        continue
 
     text = d['org_id'].lower()
     for subtext in set([text[i: j] for i in range(len(text)) for j in range(i + 1, len(text) + 1) if len(text[i:j]) == minlen]):
         counter[subtext].add((default_name, d['org_id']))
 
     for lang, name in d['name'].items():
+        if not name:
+            continue
         text = name.lower()
         if lang != default_lang:
             name += ' ({})'.format(d['name'][default_lang])

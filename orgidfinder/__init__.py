@@ -46,7 +46,7 @@ def parse_org(organisation):
 
     if not org_name.get(default_lang):
         if len(org_name) > 1:
-            print('Unclear which lang should be default')
+            print('Unclear which lang should be default: {}'.format(org_name))
         default_lang = list(org_name.keys())[0]
 
     return {
