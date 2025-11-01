@@ -1,0 +1,68 @@
+.jumbotron {
+  background-color: #fff;
+}
+
+.jumbotron .container {
+  max-width: 40rem;
+}
+
+.list-group {
+  margin-top: .25rem;
+  max-height: 12rem;
+  overflow-y: auto;
+  box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.activity-id {
+  padding-right: 40px;
+}
+
+.btn-clear {
+  margin-left: -40px; z-index: 100;
+}
+
+.footer {
+  background-color: #f5f5f5;
+}
+
+.footer > .container {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.form-control {
+  background-image: none !important;
+}
+
+.form-control[readonly] {
+  background-color: #fff;
+}
+
+#org-identifier-group {
+  visibility: hidden;
+}
+
+.select2-results__option > span {
+  display: flex;
+}
+
+.select2-rendered__name {
+  flex-basis: 100%;
+}
+
+.select2-rendered__org_id {
+  white-space: nowrap;
+  text-align: right;
+  padding-left: 10px;
+  font-style: italic;
+}
+
+.select2-rendered__match {
+  font-weight: bold;
+}
+
+.select2-container--bootstrap .select2-results > .select2-results__options {
+  max-height: 180px;
+}
